@@ -1,0 +1,24 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Lead {
+  id            Int      @id @default(autoincrement())
+  name          String
+  age           Int?
+  email         String
+  phone         String
+  maritalStatus String?
+  hasChildren   String?
+  hasHealthPlan String?
+  currentPlan   String?
+  hasCNPJ       String?
+  serviceType   String
+  createdAt     DateTime @default(now())
+}
