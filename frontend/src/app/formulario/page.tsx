@@ -1,8 +1,10 @@
-'use client'; // Adicione isso no topo do arquivo para usar hooks do React
+'use client';
 
 import { useState } from 'react';
-import Link from 'next/link';
 import api from '../../services/api';
+import { FormField, SuccessMessage, ErrorMessage, AttentionMessage,  } from '../../components/Formulario';
+import FormDescription from '../../components/Formulario/FormDescription';
+import { FiUser, FiCalendar, FiMail, FiPhone, FiBriefcase, FiCheckSquare, FiFileText, FiMessageSquare } from 'react-icons/fi';
 
 export default function Formulario() {
   const [formData, setFormData] = useState({
@@ -10,160 +12,160 @@ export default function Formulario() {
     age: '',
     email: '',
     phone: '',
-    maritalStatus: '',
-    hasChildren: '',
-    hasHealthPlan: '',
-    currentPlan: '',
-    hasCNPJ: '',
-    serviceType: 'consultoria', // Valor padrão
+    hasCNPJ: false,
+    profession: '',
+    hasHealthPlan: false,
+    contactPreference: '',
   });
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitSuccess, setSubmitSuccess] = useState(false);
+  const [submitError, setSubmitError] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsSubmitting(true);
+    setSubmitError('');
+
     try {
       const response = await api.post('/leads', formData);
       console.log('Lead enviado com sucesso:', response.data);
-      alert('Lead cadastrado com sucesso!');
+      setSubmitSuccess(true);
+
+      // Limpa os campos do formulário após o envio bem-sucedido
+      setFormData({
+        name: '',
+        age: '',
+        email: '',
+        phone: '',
+        hasCNPJ: false,
+        profession: '',
+        hasHealthPlan: false,
+        contactPreference: '',
+      });
     } catch (error) {
       console.error('Erro ao enviar lead:', error);
-      alert('Erro ao cadastrar lead. Tente novamente.');
+      setSubmitError('Erro ao cadastrar lead. Tente novamente.');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   return (
-    <div className="p-4">
-      <h1 className="text-3xl font-bold mb-6">Solicitar Cotação</h1>
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-blue-100 py-12">
+      <div className="max-w-4xl mx-auto bg-white shadow-2xl rounded-lg p-8">
+        <h1 className="text-4xl font-bold text-center text-blue-600 mb-8">Solicitar Cotação</h1>
 
-      {/* Descrição do Formulário */}
-      <section className="mb-8">
-        <p className="mb-4">
-          Preencha o formulário abaixo para solicitar uma cotação personalizada. Nossa equipe entrará em contato com você em breve.
-        </p>
-        <p>
-          Dúvidas? <Link href="/" className="text-blue-500">Volte para a página inicial</Link>.
-        </p>
-      </section>
+        {/* Descrição do Formulário */}
+        <FormDescription />
 
-      {/* Formulário */}
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label className="block">Nome Completo:</label>
-          <input
+        {/* Campo de Atenção */}
+        <AttentionMessage />
+
+        {/* Mensagens de Feedback */}
+        {submitSuccess && <SuccessMessage />}
+        {submitError && <ErrorMessage message={submitError} />}
+
+        {/* Formulário */}
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <FormField
+            label="Nome Completo:"
             type="text"
             value={formData.name}
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-            className="w-full p-2 border rounded"
             placeholder="Ex: João da Silva"
             required
+            icon={<FiUser className="inline-block mr-2" />}
           />
-        </div>
-        <div>
-          <label className="block">Idade:</label>
-          <input
+
+          <FormField
+            label="Idade:"
             type="number"
             value={formData.age}
             onChange={(e) => setFormData({ ...formData, age: e.target.value })}
-            className="w-full p-2 border rounded"
+            placeholder="Ex: 30"
+            required
+            icon={<FiCalendar className="inline-block mr-2" />}
           />
-        </div>
-        <div>
-          <label className="block">E-mail:</label>
-          <input
+
+          <FormField
+            label="E-mail:"
             type="email"
             value={formData.email}
             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-            className="w-full p-2 border rounded"
+            placeholder="Ex: joao.silva@email.com"
             required
+            icon={<FiMail className="inline-block mr-2" />}
           />
-        </div>
-        <div>
-          <label className="block">Telefone (WhatsApp):</label>
-          <input
+
+          <FormField
+            label="Telefone (WhatsApp):"
             type="tel"
             value={formData.phone}
             onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-            className="w-full p-2 border rounded"
+            placeholder="Ex: (11) 99999-9999"
+            required
+            icon={<FiPhone className="inline-block mr-2" />}
+          />
+
+          <FormField
+            label="Profissão:"
+            type="text"
+            value={formData.profession}
+            onChange={(e) => setFormData({ ...formData, profession: e.target.value })}
+            placeholder="Ex: Advogado"
+            required
+            icon={<FiBriefcase className="inline-block mr-2" />}
+          />
+
+          <FormField
+            label="Já possui plano de saúde?"
+            type="select"
+            value={formData.hasHealthPlan ? 'sim' : 'nao'}
+            onChange={(e) => setFormData({ ...formData, hasHealthPlan: e.target.value === 'sim' })}
+            icon={<FiCheckSquare className="inline-block mr-2" />}
+            options={[
+              { value: 'nao', label: 'Não' },
+              { value: 'sim', label: 'Sim' },
+            ]}
+          />
+
+          <FormField
+            label="Tem CNPJ ou MEI ativo?"
+            type="select"
+            value={formData.hasCNPJ ? 'sim' : 'nao'}
+            onChange={(e) => setFormData({ ...formData, hasCNPJ: e.target.value === 'sim' })}
+            icon={<FiFileText className="inline-block mr-2" />}
+            options={[
+              { value: 'nao', label: 'Não' },
+              { value: 'sim', label: 'Sim' },
+            ]}
+          />
+
+          <FormField
+            label="Como podemos entrar em contato?"
+            type="select"
+            value={formData.contactPreference}
+            onChange={(e) => setFormData({ ...formData, contactPreference: e.target.value })}
+            icon={<FiMessageSquare className="inline-block mr-2" />}
+            options={[
+              { value: 'Telefone', label: 'Telefone' },
+              { value: 'Email', label: 'E-mail' },
+              { value: 'WhatsApp', label: 'WhatsApp' },
+            ]}
             required
           />
-        </div>
-        <div>
-          <label className="block">Estado Civil:</label>
-          <select
-            value={formData.maritalStatus}
-            onChange={(e) => setFormData({ ...formData, maritalStatus: e.target.value })}
-            className="w-full p-2 border rounded"
+
+          {/* Botão de Enviar */}
+          <button
+            type="submit"
+            disabled={isSubmitting}
+            className="w-full p-3 bg-blue-500 text-white font-bold rounded-lg hover:bg-blue-600 transition-colors flex items-center justify-center"
           >
-            <option value="">Selecione</option>
-            <option value="solteiro">Solteiro(a)</option>
-            <option value="casado">Casado(a)</option>
-            <option value="divorciado">Divorciado(a)</option>
-            <option value="viuvo">Viúvo(a)</option>
-          </select>
-        </div>
-        <div>
-          <label className="block">Possui filhos?</label>
-          <select
-            value={formData.hasChildren}
-            onChange={(e) => setFormData({ ...formData, hasChildren: e.target.value })}
-            className="w-full p-2 border rounded"
-          >
-            <option value="">Selecione</option>
-            <option value="sim">Sim</option>
-            <option value="nao">Não</option>
-            <option value="pretendo">Pretendo ter em breve</option>
-          </select>
-        </div>
-        <div>
-          <label className="block">Já possui um plano de saúde?</label>
-          <select
-            value={formData.hasHealthPlan}
-            onChange={(e) => setFormData({ ...formData, hasHealthPlan: e.target.value })}
-            className="w-full p-2 border rounded"
-          >
-            <option value="">Selecione</option>
-            <option value="sim">Sim</option>
-            <option value="nao">Não</option>
-          </select>
-        </div>
-        {formData.hasHealthPlan === 'sim' && (
-          <div>
-            <label className="block">Qual plano você possui?</label>
-            <input
-              type="text"
-              value={formData.currentPlan}
-              onChange={(e) => setFormData({ ...formData, currentPlan: e.target.value })}
-              className="w-full p-2 border rounded"
-            />
-          </div>
-        )}
-        <div>
-          <label className="block">Tem CNPJ ou MEI ativo?</label>
-          <select
-            value={formData.hasCNPJ}
-            onChange={(e) => setFormData({ ...formData, hasCNPJ: e.target.value })}
-            className="w-full p-2 border rounded"
-          >
-            <option value="">Selecione</option>
-            <option value="sim">Sim</option>
-            <option value="nao">Não</option>
-          </select>
-        </div>
-        <div>
-          <label className="block">Escolha o tipo de serviço:</label>
-          <select
-            value={formData.serviceType}
-            onChange={(e) => setFormData({ ...formData, serviceType: e.target.value })}
-            className="w-full p-2 border rounded"
-            required
-          >
-            <option value="consultoria">Consultoria (Custo variável)</option>
-            <option value="contratar">Contratar um Plano</option>
-          </select>
-        </div>
-        <button type="submit" className="bg-blue-500 text-white p-2 rounded">
-          Enviar
-        </button>
-      </form>
+            {isSubmitting ? 'Enviando...' : 'Enviar'}
+          </button>
+        </form>
+      </div>
     </div>
   );
 }

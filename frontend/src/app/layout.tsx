@@ -1,4 +1,5 @@
-import Header from '../components/Header';
+import { Footer } from '@/components/Rodape/Rodape';
+import Header from '../components/Header/Header';
 import './globals.css';
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -7,6 +8,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <Header />
         <main className="container mx-auto p-4">{children}</main>
+        <Footer />
       </body>
     </html>
   );

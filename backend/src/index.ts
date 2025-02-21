@@ -17,30 +17,29 @@ app.post('/leads', async (req, res) => {
     age,
     email,
     phone,
-    maritalStatus,
-    hasChildren,
-    hasHealthPlan,
-    currentPlan,
-    hasCNPJ,
-    serviceType,
+    hasCNPJ,         // Removido maritalStatus, hasChildren, currentPlan e serviceType
+    profession,
+    hasHealthPlan,  // Alterado para Boolean
+    contactPreference, // Alterado para string (pode ser 'Telefone', 'Email', etc.)
   } = req.body;
 
   try {
+    // Criando o lead no banco de dados
     const newLead = await prisma.lead.create({
       data: {
         name,
         age: age ? parseInt(age) : null, // Converte idade para número
         email,
         phone,
-        maritalStatus,
-        hasChildren,
-        hasHealthPlan,
-        currentPlan,
-        hasCNPJ,
-        serviceType,
+        hasCNPJ, // Valor booleano (sim/não)
+        profession,
+        hasHealthPlan, // Valor booleano (sim/não)
+        contactPreference, // Forma de contato preferida
       },
     });
-    res.status(201).json(newLead); // Retorna o lead criado
+    
+    // Retorna o lead criado
+    res.status(201).json(newLead);
   } catch (error) {
     console.error('Erro ao criar lead:', error);
     res.status(500).json({ error: 'Erro ao criar lead' });

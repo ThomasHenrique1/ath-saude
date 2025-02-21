@@ -9,16 +9,14 @@ generator client {
 }
 
 model Lead {
-  id            Int      @id @default(autoincrement())
-  name          String
-  age           Int?
-  email         String
-  phone         String
-  maritalStatus String?
-  hasChildren   String?
-  hasHealthPlan String?
-  currentPlan   String?
-  hasCNPJ       String?
-  serviceType   String
-  createdAt     DateTime @default(now())
+  id              Int      @id @default(autoincrement())
+  name            String
+  age             Int?
+  email           String
+  phone           String
+  hasCNPJ         Boolean  // Ajustei para booleano (sim/não)
+  profession      String
+  hasHealthPlan   Boolean  // Ajustei para booleano (sim/não)
+  contactPreference String // Pode ser 'Telefone', 'Email', 'WhatsApp', etc.
+  createdAt       DateTime @default(now())
 }
