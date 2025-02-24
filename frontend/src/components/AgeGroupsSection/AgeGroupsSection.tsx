@@ -4,17 +4,17 @@ import FaixaEtaria from "../FaixaEtaria/FaixaEtaria";
 const AgeGroupsSection = () => {
   const ageGroups = [
     {
-      src: "/images/criancas.jpg",
+      src: "/images/imagemPessoas/criancas.jpg",
       alt: "Crianças",
       label: "Planos para Crianças",
     },
     {
-      src: "/images/adultos.jpg",
+      src: "/images/imagemPessoas/adultos.jpg",
       alt: "Adultos",
       label: "Planos para Adultos",
     },
     {
-      src: "/images/idoso.jpg",
+      src: "/images/imagemPessoas/idoso.jpg",
       alt: "Idosos",
       label: "Planos para Idosos",
     },

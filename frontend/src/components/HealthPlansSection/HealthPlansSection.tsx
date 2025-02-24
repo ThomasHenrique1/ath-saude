@@ -1,18 +1,19 @@
 import React from "react";
 import LogoPlanoSaude from "../LogoPlanoSaude/LogoPlanoSaude";
 
+{/*/images/logoPlanos/*/}
 const HealthPlansSection = () => {
   const logos = [
-    { src: "/images/hapvida.png", alt: "Hapvida" },
-    { src: "/images/notredame.png", alt: "NotreDame" },
-    { src: "/images/portoseguro.png", alt: "Porto Seguro" },
-    { src: "/images/unimedseguros.webp", alt: "Unimed Seguros" },
-    { src: "/images/medsenior.webp", alt: "Med Senior" },
-    { src: "/images/qualicorp.png", alt: "Qualicorp" },
-    { src: "/images/unimed.png", alt: "Unimed" },
-    { src: "/images/amil.png", alt: "Amil" },
-    { src: "/images/bradescosaude.png", alt: "Bradesco Saúde" },
-    { src: "/images/sulamerica.png", alt: "SulAmérica" },
+    { src: "/images/logoPlanos/hapvida.png", alt: "Hapvida" },
+    { src: "/images/logoPlanos/notredame.png", alt: "NotreDame" },
+    { src: "/images/logoPlanos/portoseguro.png", alt: "Porto Seguro" },
+    { src: "/images/logoPlanos/unimedseguros.webp", alt: "Unimed Seguros" },
+    { src: "/images/logoPlanos/medsenior.webp", alt: "Med Senior" },
+    { src: "/images/logoPlanos/qualicorp.png", alt: "Qualicorp" },
+    { src: "/images/logoPlanos/unimed.png", alt: "Unimed" },
+    { src: "/images/logoPlanos/amil.png", alt: "Amil" },
+    { src: "/images/logoPlanos/bradescosaude.png", alt: "Bradesco Saúde" },
+    { src: "/images/logoPlanos/sulamerica.png", alt: "SulAmérica" },
   ];
 
   return (

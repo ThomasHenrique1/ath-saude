@@ -1,5 +1,5 @@
 import FormField from './FormField';
-import SuccessMessage from './SuccessMessage';
+import SuccessMessage from './Modal';
 import ErrorMessage from './ErrorMessage';
 import AttentionMessage from './AttentionMessage';
 

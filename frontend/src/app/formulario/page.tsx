@@ -2,7 +2,8 @@
 
 import { useState } from 'react';
 import api from '../../services/api';
-import { FormField, SuccessMessage, ErrorMessage, AttentionMessage,  } from '../../components/Formulario';
+import { FormField, AttentionMessage,} from '../../components/Formulario';
+import ModalMessage from '@/components/Formulario/Modal';
 import FormDescription from '../../components/Formulario/FormDescription';
 import { FiUser, FiCalendar, FiMail, FiPhone, FiBriefcase, FiCheckSquare, FiFileText, FiMessageSquare } from 'react-icons/fi';
 
@@ -19,18 +20,24 @@ export default function Formulario() {
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitSuccess, setSubmitSuccess] = useState(false);
-  const [submitError, setSubmitError] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalTitle, setModalTitle] = useState('');
+  const [modalMessage, setModalMessage] = useState('');
+  const [modalType, setModalType] = useState<'success' | 'error'>('success');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    setSubmitError('');
 
     try {
       const response = await api.post('/leads', formData);
       console.log('Lead enviado com sucesso:', response.data);
-      setSubmitSuccess(true);
+
+      // Configura o modal de sucesso
+      setModalTitle('Sucesso!');
+      setModalMessage('Cadastro realizado com sucesso. Em breve, um de nossos consultores entrará em contato.');
+      setModalType('success');
+      setIsModalOpen(true);
 
       // Limpa os campos do formulário após o envio bem-sucedido
       setFormData({
@@ -45,10 +52,19 @@ export default function Formulario() {
       });
     } catch (error) {
       console.error('Erro ao enviar lead:', error);
-      setSubmitError('Erro ao cadastrar lead. Tente novamente.');
+
+      // Configura o modal de erro
+      setModalTitle('Erro');
+      setModalMessage('Erro ao se cadastrar! Tente novamente.');
+      setModalType('error');
+      setIsModalOpen(true);
     } finally {
       setIsSubmitting(false);
     }
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false); // Fecha o modal
   };
 
   return (
@@ -61,10 +77,6 @@ export default function Formulario() {
 
         {/* Campo de Atenção */}
         <AttentionMessage />
-
-        {/* Mensagens de Feedback */}
-        {submitSuccess && <SuccessMessage />}
-        {submitError && <ErrorMessage message={submitError} />}
 
         {/* Formulário */}
         <form onSubmit={handleSubmit} className="space-y-6">
@@ -165,6 +177,15 @@ export default function Formulario() {
             {isSubmitting ? 'Enviando...' : 'Enviar'}
           </button>
         </form>
+
+         {/* Modal de Feedback */}
+         <ModalMessage
+          isOpen={isModalOpen}
+          onClose={handleCloseModal}
+          title={modalTitle}
+          message={modalMessage}
+          type={modalType}
+        />
       </div>
     </div>
   );
