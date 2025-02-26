@@ -1,4 +1,4 @@
-import psycopg2
+import psycopg2 # type: ignore
 import smtplib
 import time
 from email.mime.text import MIMEText
